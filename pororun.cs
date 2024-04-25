@@ -19,9 +19,9 @@ namespace pororun;
 public class pororun : PhysicsGame
 {
     private const int RUUDUN_KOKO = 40;
-    private const double NOPEUS = 7500;
-    private double nykyinenNopeus = NOPEUS;
-    private const double HYPPYNOPEUS = 250;
+    private const double NOPEUS = 7500; //Asettaa nopeuden mitä ukkeli kulkee alussa 
+    private double nykyinenNopeus = NOPEUS; // muuttaa nopeutta kokoajan kasvavaksi
+    private const double HYPPYNOPEUS = 250; // vakio miten korkealle ukkeli hyppää per napinpainallus
     private PlatformCharacter pelaaja1;
     private Image pelaajanKuva = LoadImage("hahmo.png");
     private Image tahtiKuva = LoadImage("salmiakkia.png");
@@ -35,12 +35,13 @@ public class pororun : PhysicsGame
     IntMeter pisteLaskuri;/// asetetaan pistelaskuri, pelin käynnissäolo sekä muita vakioita
 
 
-    /// <summary>
-    /// Begin ohjelmassa peli käynnistyy
+     /// <summary>
+    /// Aloittaa pelin asettamalla painovoiman, kutsuu ensimmäisen kentän luontia, lisää näppäimet,
+    /// luo pistelaskurin, määrittää kameran seuraamaan pelaajaa ja käynnistää pelaajan liikuttamisajastimen.
     /// </summary>
     public override void Begin()
     {
-        Gravity = new Vector(0, -800);
+        Gravity = new Vector(0, -800); // asettaa painovoiman
         LuoSeuraavaKentta();
         LisaaNappaimet();
         LuoPistelaskuri();
@@ -107,8 +108,8 @@ public class pororun : PhysicsGame
     {
        ClearAll();
        Camera.Reset();
-        TileMap kentta = TileMap.FromLevelAsset(taso);
-        kentta.SetTileMethod('=', LisaaEste);
+        TileMap kentta = TileMap.FromLevelAsset(taso);// Muodostaa kentän vastamaan tektitiedostoa. 
+        kentta.SetTileMethod('=', LisaaEste);// lisää esteet tekstitiedoston mukaan
         kentta.SetTileMethod('#', LisaaTaso);
         kentta.SetTileMethod('*', LisaaTahti);
         kentta.SetTileMethod('J', LisaaPelaaja);
@@ -199,7 +200,7 @@ public class pororun : PhysicsGame
         pelaaja1.Image = pelaajanKuva;
         AddCollisionHandler(pelaaja1, "oikea", TormaaOikeaan);
         AddCollisionHandler(pelaaja1, "tahti", TormaaTahteen);
-        AddCollisionHandler(pelaaja1, "katto", TormaaKuolemaan);
+        AddCollisionHandler(pelaaja1, "katto", TormaaKuolemaan);// CollisionHandler komento kutsuu muuta funktiota kun ehto pelaaja koskettaa tiettyä tägiä
         AddCollisionHandler(pelaaja1, "vihu", TormaaKuolemaan);
         Add(pelaaja1);
     }
