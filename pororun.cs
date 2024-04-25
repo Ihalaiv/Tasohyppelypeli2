@@ -171,6 +171,8 @@ public class pororun : PhysicsGame
         pisteNaytto.BindTo(pisteLaskuri);
         Add(pisteNaytto);
     }
+
+    
     /// <summary>
     /// kun pelaaja törmää esteeseen tai vihuun funktio herää ja lopettaa pelin
     /// </summary>
@@ -315,6 +317,8 @@ public class pororun : PhysicsGame
         LuoSeuraavaKentta();
         peliKaynnissa = true;
     }
+
+    
      //   private void AloitaAlusta()
      //   {
      //      
