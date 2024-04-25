@@ -6,7 +6,7 @@ using System.Linq;
 
 #endregion
 
-namespace pororun
+namespace Pororun
 {
     /// <summary>
     /// The main class.
@@ -19,7 +19,7 @@ namespace pororun
         [STAThread]
         static void Main()
         {
-            using var game = new pororun();
+            using var game = new Pororun();
             game.Run();
         }
     }

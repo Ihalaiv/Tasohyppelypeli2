@@ -8,19 +8,18 @@ using Jypeli.Controls;
 using Jypeli.Widgets;
 using System.Linq;
 using System.Linq.Expressions;
-namespace pororun;
-
+namespace Pororun;
 /// @author Kaljami
 /// @version 03.03.2024
 /// <summary>
 /// 
 /// </summary>
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
-public class pororun : PhysicsGame
+public class Pororun : PhysicsGame
 {
-    private const int RUUDUN_KOKO = 40;
-    private const double NOPEUS = 7500;
-    private double nykyinenNopeus = NOPEUS;
+    private const int RuudunKoko = 40;
+    private const double Nopeus = 7500;
+    private double NykyinenNopeus = Nopeus;
     private const double HYPPYNOPEUS = 250;
     private PlatformCharacter pelaaja1;
     private Image pelaajanKuva = LoadImage("hahmo.png");
@@ -30,11 +29,14 @@ public class pororun : PhysicsGame
     private SoundEffect maaliAani = LoadSoundEffect("maali.wav");
     private bool peliKaynnissa = false;
     private bool kentta1lapi = false;
-    private bool kentta2lapi = false;
-    int Lapaistutkentat=0;
-    private int keratytSalmiakit = 0;
-    int kenttaNro = 1;
-
+    int _lapaistutkentat=0;
+    private int _keratytSalmiakit = 0;/// <summary>
+                                      /// _keratytSalmiakit kasvaa kun kerätään piste pelissä
+                                      /// </summary>
+    int _kenttaNro = 1;
+    IntMeter pisteLaskuri;/// <summary>
+                          /// muodostaa PisteLaskurin joka merkkaa kerätyt pisteet
+                          /// </summary>
     public override void Begin()
     {
         Gravity = new Vector(0, -800);
@@ -54,18 +56,18 @@ public class pororun : PhysicsGame
     }
     void PelaajanNopeus()
         {
-            nykyinenNopeus *= 1.00005;
+            NykyinenNopeus *= 1.00005;
         }
         
     void SiirraPelaajaaOikeammalle()
     {
         PelaajanNopeus(); 
-        pelaaja1.Push(new Vector(nykyinenNopeus, 0.0));
+        pelaaja1.Push(new Vector(NykyinenNopeus, 0.0));// Pakottaa pelaajan liikkumaan oikealle
     }
     
     private void LuoSeuraavaKentta()
     {
-        if(kenttaNro==1)
+        if(_kenttaNro==1)
         {
             string levu = "kentta1";
             LuoKentta(levu);   
@@ -93,17 +95,18 @@ public class pororun : PhysicsGame
         kentta.SetTileMethod('*', LisaaTahti);
         kentta.SetTileMethod('J', LisaaPelaaja);
         kentta.SetTileMethod('v', LisaaVihollinen); 
-        kentta.Execute(RUUDUN_KOKO, RUUDUN_KOKO);
+        kentta.Execute(RuudunKoko, RuudunKoko);
         Level.CreateLeftBorder();
         Level.CreateTopBorder();
         Level.CreateBottomBorder();
         LisaaNappaimet();
-        Camera.FollowOffset = new Vector(Screen.Width / 2.5 - RUUDUN_KOKO, 0.0);
-        PhysicsObject Maali =  Level.CreateRightBorder();
-        Maali.Tag = "oikea";
+        Camera.FollowOffset = new Vector(Screen.Width / 2.5 - RuudunKoko, 0.0);
+        PhysicsObject maali =  Level.CreateRightBorder();
+        maali.Tag = "oikea";
         LisaaNappaimet();
         Camera.StayInLevel = true;
         SiirraPelaajaaOikeammalle();
+        LuoPistelaskuri();
     }
     private void LisaaTaso(Vector paikka, double leveys, double korkeus)
     {
@@ -121,20 +124,18 @@ public class pororun : PhysicsGame
         tahti.Position = paikka;
         tahti.Image = tahtiKuva;
         tahti.Tag = "tahti";
-        Add(tahti);
+        Add(tahti);///lisää salmiakit
     }
-    IntMeter pisteLaskuri;
 
     void LuoPistelaskuri()
     {
-        
-        pisteLaskuri = new IntMeter(keratytSalmiakit);               
+        pisteLaskuri = new IntMeter(_keratytSalmiakit);               
         Label pisteNaytto = new Label(); 
         pisteNaytto.X = Screen.Left + 100;
         pisteNaytto.Y = Screen.Top - 100;
         pisteNaytto.TextColor = Color.Black;
         pisteNaytto.Color = Color.LightBlue;
-        pisteLaskuri.Value= keratytSalmiakit;
+        pisteLaskuri.Value= _keratytSalmiakit;
         pisteNaytto.BindTo(pisteLaskuri);
         Add(pisteNaytto);
     }
@@ -184,10 +185,7 @@ public class pororun : PhysicsGame
         ControllerOne.Listen(Button.A, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja1, HYPPYNOPEUS);
         PhoneBackButton.Listen(ConfirmExit, "Lopeta peli");
     }
-    private void Liikuta(PlatformCharacter hahmo, double nopeus)
-    {
-        hahmo.Walk(nopeus);
-    }
+ 
 
     private void Hyppaa(PlatformCharacter hahmo, double nopeus)
     {
@@ -199,8 +197,8 @@ public class pororun : PhysicsGame
         maaliAani.Play();
         MessageDisplay.Add("Sait Salmiakkia! tämä maistuu hyvältä saunassa!");
         tahti.Destroy();
-        keratytSalmiakit++;
-        pisteLaskuri.Value = keratytSalmiakit;
+        _keratytSalmiakit++;
+        pisteLaskuri.Value = _keratytSalmiakit;/// pistelaskuri saa arvon lisää kun _keratytSalmiakit kasvaa
     }
     private void VaihdaKenttään(int kenttaNro)
     {
@@ -218,9 +216,7 @@ public class pororun : PhysicsGame
     private void AloitaAlusta()
     {
         VaihdaKenttään(1);
-        kentta1lapi = false;
-        kentta2lapi = false;
-        keratytSalmiakit = 0;
+        _keratytSalmiakit = 0;
     }
 
     private void LisaaEste(Vector paikka, double leveys, double korkeus)
@@ -236,13 +232,13 @@ public class pororun : PhysicsGame
     {
         maaliAani.Play();
         kentta1lapi = true;
-        Lapaistutkentat++;
-        kenttaNro++;
+        _lapaistutkentat++;
+        _kenttaNro++;
         if(kentta1lapi)
         {
             MessageDisplay.Add("Löysit saunajuomat! Löydätkö vielä tien saunaan?");
         }
-        else if(Lapaistutkentat>2)
+        else if(_lapaistutkentat>2)
         {
             MessageDisplay.Add("Tervetuloa saunaan, keräsit {$keratytSalmiakit} salmiakkia");
             StopAll();
@@ -250,17 +246,72 @@ public class pororun : PhysicsGame
         LuoSeuraavaKentta();
         peliKaynnissa = true;
     }
- //   private void AloitaAlusta()
- //   {
- //      
- //           ClearAll();  
- //           kentta1lapi = false; 
- //           kentta2lapi = false;
- //           keratytSalmiakit = 0;  
- //           LuoSeuraavaKentta(); 
- //   }
     private string GetDebuggerDisplay()
     {
         return ToString();
     }
 }
+ //class Program
+ //       {
+           // static void Main(string[] args)
+           // {
+           //     for (int i = 1; i <= 100; i++)
+           //     {
+           //
+           //         if (i % 5 == 0 && i != 0) // tarkistaa jaollisuuden
+           //         {
+           //             Console.WriteLine(i+" Hep!"); // huutaa hep jos jaollinen
+           //         }
+           //         else 
+           //             Console.WriteLine(i);
+           //     }
+           // }
+            
+         //   public class nautettavat 
+         //   {
+         //       public static void Main()
+         //       {
+         //           int[] luvut = { 12, 3, 5, 9, 7, 1, 4, 9 };
+         //           TulostaYli(luvut, 4);
+         //       }
+         //
+         //       public static void TulostaYli(int[] taulukko, int raja)
+         //       {
+         //           bool ensimmainen = true; //apumuuttuja tuloksien hallintaan
+         //           foreach (int luku in taulukko)
+         //           {
+         //               if (luku > raja)
+         //               {
+         //                   if (!ensimmainen)
+         //                   {
+         //                       Console.Write(" "); 
+         //                   }
+         //                   Console.Write(luku);
+         //                   ensimmainen = false; // Ensimmäinen luku on jo tulostettu joten merkitään seuraava
+         //               }
+         //           }
+         //           Console.WriteLine(); // Lopun rivinvaihto
+         //       }
+         //   }
+      //   static string PisinJono(List<string> jonot)
+      //   {
+      //       if (jonot == null || jonot.Count == 0)
+      //       {
+      //           return null; // Palautetaan null, jos lista on tyhjä tai null
+      //       }
+      //
+      //       string pisin = jonot[0]; // Alustetaan pisimmäksi merkkijonoksi ensimmäinen alkuun
+      //
+      //       foreach (string merkkit in jonot)
+      //       {
+      //           if (merkkit.Length > pisin.Length)
+      //           {
+      //               pisin = merkkit; // Päivitetään tarvittaessa merkkijonoa
+      //           }
+      //       }
+      //
+      //       return pisin;
+      //   }
+      //   
+      //  }
+    
