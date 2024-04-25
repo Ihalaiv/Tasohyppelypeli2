@@ -30,10 +30,14 @@ public class pororun : PhysicsGame
     private SoundEffect maaliAani = LoadSoundEffect("maali.wav");
     private bool peliKaynnissa = false;
     private bool kentta1lapi = false;
-    private int lapaistutkentat = 0;
+    private int kenttaNro = 0;
     private int keratytSalmiakit = 0;
-    IntMeter pisteLaskuri;
+    IntMeter pisteLaskuri;/// asetetaan pistelaskuri, pelin käynnissäolo sekä muita vakioita
 
+
+    /// <summary>
+    /// Begin ohjelmassa peli käynnistyy
+    /// </summary>
     public override void Begin()
     {
         Gravity = new Vector(0, -800);
@@ -51,17 +55,27 @@ public class pororun : PhysicsGame
         liikutusajastin.Start();
         peliKaynnissa = true;
     }
-    void PelaajanNopeus()
-        {
-            nykyinenNopeus *= 1.00005;
-        }
-        
-    void SiirraPelaajaaOikeammalle()
+
+/// <summary>
+/// PelaajanNopeus funktio säätää pelaajan tämänhetkinsen nopeuden, sekä kasvattaa tämänhetkistä nopeutta kertoimella
+/// </summary>
+    private void PelaajanNopeus()
+    {
+        nykyinenNopeus *= 1.00005;
+    }
+
+    /// <summary>
+    /// Pakottaa pelaajan liikkumaan oikealle
+    /// </summary>
+    private void SiirraPelaajaaOikeammalle()
     {
         PelaajanNopeus(); 
         pelaaja1.Push(new Vector(nykyinenNopeus, 0.0));
     }
     
+    /// <summary>
+    /// Luo kentän 2 kun kenttä 1 on läpäisty
+    /// </summary>
     private void LuoSeuraavaKentta()
     {
         if(kenttaNro==1)
@@ -81,8 +95,11 @@ public class pororun : PhysicsGame
             Camera.Follow(pelaaja1);
         }
     }
-
-    void LuoKentta(string taso)
+/// <summary>
+/// Rakentaa kenttään tason katon esteet ja muut, sekä aseittaa näppäimet
+/// </summary>
+/// <param name="taso"></param>
+    private void LuoKentta(string taso)
     {
        ClearAll();
        Camera.Reset();
@@ -103,7 +120,14 @@ public class pororun : PhysicsGame
         LisaaNappaimet();
         Camera.StayInLevel = true;
         SiirraPelaajaaOikeammalle();
+        LuoPistelaskuri();
     }
+    /// <summary>
+    /// Muodostaa kenttään katon
+    /// </summary>
+    /// <param name="paikka"></param>
+    /// <param name="leveys"></param>
+    /// <param name="korkeus"></param>
     private void LisaaTaso(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject taso = PhysicsObject.CreateStaticObject(leveys, korkeus);
@@ -112,7 +136,12 @@ public class pororun : PhysicsGame
         taso.Tag = "seina";
         Add(taso);
     }
-
+/// <summary>
+/// muodostaa kenttään tähden
+/// </summary>
+/// <param name="paikka"></param>
+/// <param name="leveys"></param>
+/// <param name="korkeus"></param>
     private void LisaaTahti(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject tahti = PhysicsObject.CreateStaticObject(leveys, korkeus);
@@ -122,8 +151,10 @@ public class pororun : PhysicsGame
         tahti.Tag = "tahti";
         Add(tahti);
     }
-
-    void LuoPistelaskuri()
+/// <summary>
+/// rakentaa pistelaskurin tähti muuttujalle ja osoittaa kerättyjen tähtien määrän 
+/// </summary>
+    private void LuoPistelaskuri()
     {
         
         pisteLaskuri = new IntMeter(keratytSalmiakit);               
@@ -136,7 +167,12 @@ public class pororun : PhysicsGame
         pisteNaytto.BindTo(pisteLaskuri);
         Add(pisteNaytto);
     }
-    void TormaaKuolemaan(PhysicsObject tormaaja, PhysicsObject kohde)
+    /// <summary>
+    /// kun pelaaja törmää esteeseen tai vihuun funktio herää ja lopettaa pelin
+    /// </summary>
+    /// <param name="tormaaja"></param>
+    /// <param name="kohde"></param>
+    private void TormaaKuolemaan(PhysicsObject tormaaja, PhysicsObject kohde)
     {
         if (peliKaynnissa)
         {
@@ -146,6 +182,12 @@ public class pororun : PhysicsGame
             liikutusajastin.Stop();
         }
     }
+    /// <summary>
+    /// lisää pelaajan
+    /// </summary>
+    /// <param name="paikka"></param>
+    /// <param name="leveys"></param>
+    /// <param name="korkeus"></param>
     private void LisaaPelaaja(Vector paikka, double leveys, double korkeus)
     {
         pelaaja1 = new PlatformCharacter(leveys, korkeus);
@@ -158,8 +200,13 @@ public class pororun : PhysicsGame
         AddCollisionHandler(pelaaja1, "vihu", TormaaKuolemaan);
         Add(pelaaja1);
     }
-
-    void LisaaVihollinen(Vector paikka, double leveys, double korkeus)
+/// <summary>
+/// lisää vihollisen sekä laittaa sen liikkumaan ylös ja alas
+/// </summary>
+/// <param name="paikka"></param>
+/// <param name="leveys"></param>
+/// <param name="korkeus"></param>
+    private void LisaaVihollinen(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject vihollinen = new PhysicsObject(leveys, korkeus);
         vihollinen.Position = paikka;
@@ -171,27 +218,41 @@ public class pororun : PhysicsGame
         vihollinen.Oscillate(new Vector(0, 1), korkeus * 1.5, 0.3);
         vihollinen.Tag = "vihu";
     }
-
+/// <summary>
+/// Lisää näppäimet
+/// </summary>
     private void LisaaNappaimet()
     {
         Keyboard.Listen(Key.F1, ButtonState.Pressed, ShowControlHelp, "Näytä ohjeet");
         Keyboard.Listen(Key.Escape, ButtonState.Pressed, ConfirmExit, "Lopeta peli");
         Keyboard.Listen(Key.Up, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja1, HYPPYNOPEUS);
-        Keyboard.Listen(Key.R, ButtonState.Pressed,AloitaAlusta , "Aloita alusta");
         ControllerOne.Listen(Button.Back, ButtonState.Pressed, Exit, "Poistu pelistä");
         ControllerOne.Listen(Button.A, ButtonState.Pressed, Hyppaa, "Pelaaja hyppää", pelaaja1, HYPPYNOPEUS);
         PhoneBackButton.Listen(ConfirmExit, "Lopeta peli");
     }
+    /// <summary>
+    /// Liikuttaa hahmoa
+    /// </summary>
+    /// <param name="hahmo"></param>
+    /// <param name="nopeus"></param>
     private void Liikuta(PlatformCharacter hahmo, double nopeus)
     {
         hahmo.Walk(nopeus);
     }
-
+/// <summary>
+/// pakottaa hypyn hypyn perään
+/// </summary>
+/// <param name="hahmo"></param>
+/// <param name="nopeus"></param>
     private void Hyppaa(PlatformCharacter hahmo, double nopeus)
     {
         hahmo.ForceJump(nopeus);
     }
-
+/// <summary>
+/// laittaa törmäyksen tähteen lisäämään arvoa pistelaskurille
+/// </summary>
+/// <param name="hahmo"></param>
+/// <param name="tahti"></param>
     private void TormaaTahteen(PhysicsObject hahmo, PhysicsObject tahti)
     {
         maaliAani.Play();
@@ -200,6 +261,10 @@ public class pororun : PhysicsGame
         keratytSalmiakit++;
         pisteLaskuri.Value = keratytSalmiakit;
     }
+    /// <summary>
+    /// tyhjentää edellisen kentän sekä kutsuu uutta kenttää
+    /// </summary>
+    /// <param name="kenttaNro"></param>
     private void VaihdaKenttään(int kenttaNro)
     {
         ClearAll();
@@ -213,14 +278,12 @@ public class pororun : PhysicsGame
         peliKaynnissa = true;
     }
 
-    private void AloitaAlusta()
-    {
-        VaihdaKenttään(1);
-        kentta1lapi = false;
-        kentta2lapi = false;
-        keratytSalmiakit = 0;
-    }
-
+/// <summary>
+/// lisää katon sekä esteet
+/// </summary>
+/// <param name="paikka"></param>
+/// <param name="leveys"></param>
+/// <param name="korkeus"></param>
     private void LisaaEste(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject Esteet = PhysicsObject.CreateStaticObject(leveys, korkeus);
@@ -229,18 +292,21 @@ public class pororun : PhysicsGame
         Esteet.Tag = "katto";
         Add(Esteet);
     }
-    
-    void TormaaOikeaan(PhysicsObject hahmo, PhysicsObject maali)
+    /// <summary>
+    /// Kun pelaaja törmää oikeaan reunaan eli pääsee kentän läpi, asetetaan kenttanumeroa isommaksi sekä tehdään kenttä 2
+    /// </summary>
+    /// <param name="hahmo"></param>
+    /// <param name="maali"></param>
+    private void TormaaOikeaan(PhysicsObject hahmo, PhysicsObject maali)
     {
         maaliAani.Play();
         kentta1lapi = true;
-        Lapaistutkentat++;
-        kenttaNro++;
+       
         if(kentta1lapi)
         {
             MessageDisplay.Add("Löysit saunajuomat! Löydätkö vielä tien saunaan?");
         }
-        else if(Lapaistutkentat>2)
+        else if(kenttaNro>2)
         {
             MessageDisplay.Add("Tervetuloa saunaan, keräsit {$keratytSalmiakit} salmiakkia");
             StopAll();
@@ -262,3 +328,67 @@ public class pororun : PhysicsGame
         return ToString();
     }
 }
+ //class Program
+ //       {
+           // static void Main(string[] args)
+           // {
+           //     for (int i = 1; i <= 100; i++)
+           //     {
+           //
+           //         if (i % 5 == 0 && i != 0) // tarkistaa jaollisuuden
+           //         {
+           //             Console.WriteLine(i+" Hep!"); // huutaa hep jos jaollinen
+           //         }
+           //         else 
+           //             Console.WriteLine(i);
+           //     }
+           // }
+            
+         //   public class nautettavat 
+         //   {
+         //       public static void Main()
+         //       {
+         //           int[] luvut = { 12, 3, 5, 9, 7, 1, 4, 9 };
+         //           TulostaYli(luvut, 4);
+         //       }
+         //
+         //       public static void TulostaYli(int[] taulukko, int raja)
+         //       {
+         //           bool ensimmainen = true; //apumuuttuja tuloksien hallintaan
+         //           foreach (int luku in taulukko)
+         //           {
+         //               if (luku > raja)
+         //               {
+         //                   if (!ensimmainen)
+         //                   {
+         //                       Console.Write(" "); 
+         //                   }
+         //                   Console.Write(luku);
+         //                   ensimmainen = false; // Ensimmäinen luku on jo tulostettu joten merkitään seuraava
+         //               }
+         //           }
+         //           Console.WriteLine(); // Lopun rivinvaihto
+         //       }
+         //   }
+      //   static string PisinJono(List<string> jonot)
+      //   {
+      //       if (jonot == null || jonot.Count == 0)
+      //       {
+      //           return null; // Palautetaan null, jos lista on tyhjä tai null
+      //       }
+      //
+      //       string pisin = jonot[0]; // Alustetaan pisimmäksi merkkijonoksi ensimmäinen alkuun
+      //
+      //       foreach (string merkkit in jonot)
+      //       {
+      //           if (merkkit.Length > pisin.Length)
+      //           {
+      //               pisin = merkkit; // Päivitetään tarvittaessa merkkijonoa
+      //           }
+      //       }
+      //
+      //       return pisin;
+      //   }
+      //   
+      //  }
+    
