@@ -9,6 +9,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7c606be3-3168-4547-8420-fad08ec77ad8" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Tasohyppelypeli2/.idea/indexLayout.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Tasohyppelypeli2/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/.idea.Tasohyppelypeli2/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Tasohyppelypeli2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Tasohyppelypeli2/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/kentta1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Content/kentta1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Ohjelma.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Ohjelma.cs" afterDir="false" />
@@ -16,8 +19,6 @@
       <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/Tasohyppelypeli2.dll" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/Tasohyppelypeli2.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/Tasohyppelypeli2.exe" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/Tasohyppelypeli2.exe" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/Debug/net7.0/Tasohyppelypeli2.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/bin/Debug/net7.0/Tasohyppelypeli2.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.AssemblyInfo.cs" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.AssemblyInfo.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.AssemblyInfoInputs.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.AssemblyInfoInputs.cache" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.csproj.FileListAbsolute.txt" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.csproj.FileListAbsolute.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.dll" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.dll" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.genruntimeconfig.cache" beforeDir="false" afterPath="$PROJECT_DIR$/obj/Debug/net7.0/Tasohyppelypeli2.genruntimeconfig.cache" afterDir="false" />
@@ -151,6 +152,7 @@
       <workItem from="1713094580626" duration="348000" />
       <workItem from="1713102510339" duration="13065000" />
       <workItem from="1713424897357" duration="2672000" />
+      <workItem from="1713526298797" duration="506000" />
     </task>
     <servers />
   </component>
