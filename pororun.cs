@@ -104,6 +104,7 @@ public class pororun : PhysicsGame
     /// <summary>
     /// Rakentaa kenttään tason katon esteet ja muut, sekä aseittaa näppäimet
     /// </summary>
+    /// <param name="taso">määrittää mikä taso on kyseessä</param>
     private void LuoKentta(string taso)
     {
        ClearAll();
@@ -132,6 +133,9 @@ public class pororun : PhysicsGame
     /// <summary>
     /// Muodostaa kenttään katon
     /// </summary>
+    /// <param name="paikka">muodostaa paikkavektorin</param>
+    /// <param name="leveys">määrittää tason leveyden</param>
+    /// <param name="korkeus">määrittää tason korkeuden</param>
     private void LisaaTaso(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject taso = PhysicsObject.CreateStaticObject(leveys, korkeus);
@@ -145,6 +149,9 @@ public class pororun : PhysicsGame
     /// <summary>
     /// muodostaa kenttään tähden
     /// </summary>
+    /// <param name="paikka">muodostaa paikkavektorin</param>
+    /// <param name="leveys">määrittää tähden leveyden</param>
+    /// <param name="korkeus">määrittää tähden korkeuden</param>
     private void LisaaTahti(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject tahti = PhysicsObject.CreateStaticObject(leveys, korkeus);
@@ -192,6 +199,9 @@ public class pororun : PhysicsGame
     /// <summary>
     /// lisää pelaajan
     /// </summary>
+    /// <param name="paikka">muodostaa paikkavektorin</param>
+    /// <param name="leveys">määrittää pelaajan leveyden</param>
+    /// <param name="korkeus">määrittää pelaajan korkeuden</param>
     private void LisaaPelaaja(Vector paikka, double leveys, double korkeus)
     {
         pelaaja1 = new PlatformCharacter(leveys, korkeus);
@@ -209,6 +219,9 @@ public class pororun : PhysicsGame
     /// <summary>
     /// lisää vihollisen sekä laittaa sen liikkumaan ylös ja alas
     /// </summary>
+    /// <param name="paikka">muodostaa paikkavektorin</param>
+    /// <param name="leveys">määrittää vihollisen leveyden</param>
+    /// <param name="korkeus">määrittää vihollisen korkeuden</param>
     private void LisaaVihollinen(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject vihollinen = new PhysicsObject(leveys, korkeus);
@@ -240,6 +253,8 @@ public class pororun : PhysicsGame
     /// <summary>
     /// Liikuttaa hahmoa
     /// </summary>
+    /// <param name="hahmo">kutsuu hahmon</param>
+    /// <param name="nopeus">laittaa pelaajan kulkemaan sen hetkisellä nopeudella</param>
     private void Liikuta(PlatformCharacter hahmo, double nopeus)
     {
         hahmo.Walk(nopeus);
@@ -249,6 +264,8 @@ public class pororun : PhysicsGame
     /// <summary>
     /// pakottaa hypyn hypyn perään
     /// </summary>
+    /// <param name="hahmo">kutsuu pelaajan </param>
+    /// <param name="nopeus">ottaa tämänhetkisen nopeuden ja suhteuttaa hypyn korkeuden nopeuteen sekä pakottaa toisen hypyn putkeen</param>
     private void Hyppaa(PlatformCharacter hahmo, double nopeus)
     {
         hahmo.ForceJump(nopeus);
@@ -258,6 +275,8 @@ public class pororun : PhysicsGame
     /// <summary>
     /// laittaa törmäyksen tähteen lisäämään arvoa pistelaskurille
     /// </summary>
+    /// <param name="hahmo">kutsuu hahmon</param>
+    /// <param name="tahti">kutsuu tähden ja määrittää mitä käy kun hahmo ja tähti kohtaavat</param>
     private void TormaaTahteen(PhysicsObject hahmo, PhysicsObject tahti)
     {
         maaliAani.Play();
@@ -271,6 +290,7 @@ public class pororun : PhysicsGame
     /// <summary>
     /// tyhjentää edellisen kentän sekä kutsuu uutta kenttää
     /// </summary>
+    /// <param name="kenttaNro">katsoo mikä kenttänumero on ja mikä kenttä tehdään seuraavaksi</param>
     private void VaihdaKenttään(int kenttaNro)
     {
         ClearAll();
@@ -288,6 +308,9 @@ public class pororun : PhysicsGame
     /// <summary>
     /// lisää katon sekä esteet
     /// </summary>
+    /// <param name="paikka">muodostaa paikkavektorin</param>
+    /// <param name="leveys">määrittää esteen leveyden</param>
+    /// <param name="korkeus">määrittää esteen korkeuden</param>
     private void LisaaEste(Vector paikka, double leveys, double korkeus)
     {
         PhysicsObject Esteet = PhysicsObject.CreateStaticObject(leveys, korkeus);
@@ -301,6 +324,8 @@ public class pororun : PhysicsGame
     /// <summary>
     /// Kun pelaaja törmää oikeaan reunaan eli pääsee kentän läpi, asetetaan kenttanumeroa isommaksi sekä tehdään kenttä 2
     /// </summary>
+    /// <param name="hahmo">kutsuu hahmoa ja kertoo mitä sille käy</param>
+    /// <param name="maali">kertoo törmäyksen kohteen ja funktio kertoo mitä sitten käy</param>
     private void TormaaOikeaan(PhysicsObject hahmo, PhysicsObject maali)
     {
         maaliAani.Play();
