@@ -320,15 +320,6 @@ public class pororun : PhysicsGame
     }
 
     
-     //   private void AloitaAlusta()
-     //   {
-     //      
-     //           ClearAll();  
-     //           kentta1lapi = false; 
-     //           kentta2lapi = false;
-     //           keratytSalmiakit = 0;  
-     //           LuoSeuraavaKentta(); 
-     //   }
     private string GetDebuggerDisplay()
     {
         return ToString();
